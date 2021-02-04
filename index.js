@@ -27,7 +27,7 @@ async function run() {
     }
     app.get("/", async (req, res) => {
       const jobs = await cursor.toArray();
-      res.send(jobs);
+      res.send(jobs); /* && jobs.replace(/(<([^>]+)>)/gi, "")) */
     });
 
     app.listen(port, () => {
