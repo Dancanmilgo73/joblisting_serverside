@@ -3,6 +3,8 @@ const app = express();
 require("dotenv").config();
 const port = process.env.PORT || 3001;
 const { MongoClient } = require("mongodb");
+const cors = require("cors");
+app.use(cors());
 
 const uri =
   "mongodb+srv://dancan:Dancan2020@search--jobs.sp1it.mongodb.net/search--jobs?retryWrites=true&w=majority";
@@ -25,9 +27,9 @@ async function run() {
     if ((await cursor.count()) === 0) {
       console.log("No documents found!");
     }
-    app.get("/", async (req, res) => {
+    app.get("/", async (req, res, next) => {
       const jobs = await cursor.toArray();
-      res.header("Access-Control-Allow-Origin", "*");
+      //res.header("Access-Control-Allow-Origin", "*");
       res.send(jobs); /* && jobs.replace(/(<([^>]+)>)/gi, "")) */
     });
 
