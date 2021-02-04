@@ -27,6 +27,7 @@ async function run() {
     }
     app.get("/", async (req, res) => {
       const jobs = await cursor.toArray();
+      res.header("Access-Control-Allow-Origin", "http://localhost:3000");
       res.send(jobs); /* && jobs.replace(/(<([^>]+)>)/gi, "")) */
     });
 
