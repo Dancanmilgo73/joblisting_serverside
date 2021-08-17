@@ -30,7 +30,9 @@ async function run() {
     app.get("/", async (req, res, next) => {
       const jobs = await cursor.toArray();
       //res.header("Access-Control-Allow-Origin", "*");
-      res.send(jobs); /* && jobs.replace(/(<([^>]+)>)/gi, "")) */
+      res.send(
+        JSON.stringify(jobs)
+      ); /* && jobs.replace(/(<([^>]+)>)/gi, "")) */
     });
 
     app.listen(port, () => {
