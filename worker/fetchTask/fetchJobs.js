@@ -16,17 +16,44 @@ async function fetchGit() {
     const db = client.db("search--jobs");
     const col = db.collection("jobsToStore");
     const options = { ordered: true };
-    const APIUrl = "https://jobs.github.com/positions.json";
+
     let page = 0;
     let numOfJobs = 0;
+    let countries = [
+      "gb",
+      "at",
+      "au",
+      "br",
+      "ca",
+      "de",
+      "fr",
+      "in",
+      "it",
+      "nl",
+      "nz",
+      "pl",
+      "ru",
+      "sg",
+      "us",
+      "za",
+    ];
+    let countryLen = countries.length;
     const jobs = [];
-    do {
-      const res = await fetch(`${APIUrl}?page=${page}`);
-      var data = await res.json();
-      numOfJobs = data.length;
-      jobs.push(...data);
-      page++;
-    } while (numOfJobs > 0);
+    while (countryLen > 0) {
+      const APIUrl = `http://api.adzuna.com/v1/api/jobs/${
+        countries[countryLen - 1]
+      }/search/1?app_id=a26ccfa3&app_key=d61ce5e20a189f11648fba513dd855d4&results_per_page=50&what=javascript%20developer&content-type=application/json`;
+      do {
+        const res = await fetch(`${APIUrl}`); /* ?page=${page} */
+        var data = await res.json();
+        numOfJobs = data.length;
+        console.log(data.results);
+        jobs.push(...data.results);
+        page++;
+      } while (numOfJobs > 0);
+
+      countryLen--;
+    }
 
     console.log(jobs.length);
     const result = await col.insertMany(jobs, options);
@@ -40,5 +67,6 @@ async function fetchGit() {
     await client.close();
   }
 }
+
 fetchGit().catch(console.dir);
 module.exports = fetchGit;
