@@ -41,7 +41,7 @@ async function run() {
     // replace console.dir with your callback to access individual elements
     //await cursor.forEach(console.dir);
   } finally {
-    //await client.close();
+    await client.close();
   }
 }
 run().catch(console.dir);
