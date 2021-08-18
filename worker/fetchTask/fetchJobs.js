@@ -39,21 +39,18 @@ async function fetchGit() {
     ];
     let countryLen = countries.length;
     const jobs = [];
-    while (countryLen > 0) {
-      const APIUrl = `http://api.adzuna.com/v1/api/jobs/${
-        countries[countryLen - 1]
-      }/search/1?app_id=a26ccfa3&app_key=d61ce5e20a189f11648fba513dd855d4&results_per_page=50&what=javascript%20developer&content-type=application/json`;
-      do {
-        const res = await fetch(`${APIUrl}`); /* ?page=${page} */
-        var data = await res.json();
-        numOfJobs = data.length;
-        console.log(data.results);
-        jobs.push(...data.results);
-        page++;
-      } while (numOfJobs > 0);
 
-      countryLen--;
-    }
+    const APIUrl = `http://api.adzuna.com/v1/api/jobs/${
+      countries[countryLen - 1]
+    }/search/1?app_id=a26ccfa3&app_key=d61ce5e20a189f11648fba513dd855d4&results_per_page=50&what=javascript%20developer&content-type=application/json`;
+    do {
+      const res = await fetch(`${APIUrl}`); /* ?page=${page} */
+      var data = await res.json();
+      numOfJobs = data.length;
+      console.log(data);
+      jobs.push(data);
+      page++;
+    } while (numOfJobs > 0);
 
     console.log(jobs.length);
     const result = await col.insertMany(jobs, options);
